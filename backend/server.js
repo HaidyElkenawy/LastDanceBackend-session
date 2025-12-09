@@ -22,4 +22,9 @@ const PORT = process.env.PORT || 5000;
 app.get("/", (req, res) => {
   res.send("Books Assignment Backend is running");
 });
-app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+
+
+app.listen(PORT, function () {
+  connectDB();
+  console.log(`Server is running on port ${PORT}`);
+});
