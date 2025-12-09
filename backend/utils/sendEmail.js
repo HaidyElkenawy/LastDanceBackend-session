@@ -12,17 +12,21 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-async function sendMail(to, subject, text) {  
+// NOTICE THE CURLY BRACES { } BELOW
+async function sendMail({ to, subject, text }) {   
     try {
         await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to,
-        subject,
-        text
-    });
+            from: process.env.EMAIL_USER,
+            to,
+            subject,
+            text
+        });
         console.log(`Email sent to ${to}`);
     } catch (error) {
+        // Now 'to' will be a proper string, so the error log will look right
         console.error(`Error sending email to ${to}:`, error);
+        throw error; // Throw error so the controller knows it failed
     }
 }
+
 module.exports = sendMail;
