@@ -1,13 +1,30 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require('cors');
+
+
 const connectDB = require("./utils/db");
+const rateLimit = require("express-rate-limit");
+
 const authRoutes = require("./routes/auth");
 const bookRoutes = require("./routes/books");
 const purchaseRoutes = require("./routes/purchases");
 const errorHandler = require("./middleware/errorHandler");
 
+
+
 const app = express();
 app.use(express.json());
+app.use(cors({origin: JSON.parse(process.env.PRODUCTION)?
+  process.env.CLIENT: '*'
+})); // Enable CORS for all origins);
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
+app.use(limiter);
+
 
 connectDB();
 
